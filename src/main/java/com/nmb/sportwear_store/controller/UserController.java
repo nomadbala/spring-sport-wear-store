@@ -63,11 +63,4 @@ public class UserController {
     public void updateLastName(@RequestBody UpdateLastNameRequest request) throws FailedUserUpdateException {
         service.updateLastName(request);
     }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public UserDTO findById(Long id) throws UserNotFoundException {
-        return service.findById(id);
-    }
 }

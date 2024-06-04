@@ -8,7 +8,7 @@ public record ProductDTO(
         String title,
         String brand,
         BigDecimal price,
-        String category,
+        CategoryDTO category,
         String size,
         String color
 ) implements Serializable {

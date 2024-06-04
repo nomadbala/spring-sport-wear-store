@@ -6,6 +6,7 @@ import com.nmb.sportwear_store.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,9 @@ public class AuthenticationService {
 
     @Transactional
     public JwtToken authenticate(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.username(), request.password()));
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return jwtUtil.generateToken(userDetails);
     }
 }

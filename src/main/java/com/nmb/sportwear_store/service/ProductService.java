@@ -4,6 +4,7 @@ import com.nmb.sportwear_store.dto.ProductDTO;
 import com.nmb.sportwear_store.dto.ProductRequestCriterion;
 import com.nmb.sportwear_store.entity.Product;
 import com.nmb.sportwear_store.exception.ProductNotFoundException;
+import com.nmb.sportwear_store.mapper.CategoryMapper;
 import com.nmb.sportwear_store.mapper.ProductMapper;
 import com.nmb.sportwear_store.repository.ProductRepository;
 import jakarta.persistence.EntityManager;
@@ -13,7 +14,6 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,12 +60,14 @@ public class ProductService {
         Product existingProduct = repository.findById(productDTO.id())
                 .orElseThrow(() -> new ProductNotFoundException("Product with id %d not found".formatted(productDTO.id())));
 
-        existingProduct.setTitle(productDTO.title());
-        existingProduct.setBrand(productDTO.brand());
-        existingProduct.setPrice(productDTO.price());
-        existingProduct.setCategory(productDTO.category());
-        existingProduct.setSize(productDTO.size());
-        existingProduct.setColor(productDTO.color());
+        existingProduct.builder()
+                .title(productDTO.title())
+                .brand(productDTO.brand())
+                .price(productDTO.price())
+                .category(CategoryMapper.INSTANCE.categoryDTOToCategory(productDTO.category()))
+                .size(productDTO.size())
+                .color(productDTO.color())
+                .build();
 
         repository.save(existingProduct);
 

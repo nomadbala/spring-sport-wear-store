@@ -1,5 +1,6 @@
 package com.nmb.sportwear_store.config;
 
+import com.nmb.sportwear_store.security.CustomAuthenticationProvider;
 import com.nmb.sportwear_store.security.JwtService;
 import com.nmb.sportwear_store.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,8 @@ public class SecurityConfig {
 
     private final JwtService jwtService;
 
+    private final CustomAuthenticationProvider authenticationProvider;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -65,7 +68,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider())
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtService, UsernamePasswordAuthenticationFilter.class);
         return http.build();
 

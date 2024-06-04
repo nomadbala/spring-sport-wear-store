@@ -8,6 +8,8 @@ import com.nmb.sportwear_store.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -60,4 +62,13 @@ public class UserService {
     public UserDTO findById(Long id) throws UserNotFoundException {
         return userManipulationService.findById(id);
     }
+
+    public void deleteById(Long id) {
+        userManipulationService.deleteById(id);
+    }
+
+    public List<UserDTO> findAll() {
+        return userManipulationService.findAll();
+    }
+
 }

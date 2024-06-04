@@ -1,5 +1,6 @@
 package com.nmb.sportwear_store.service;
 
+import com.nmb.sportwear_store.dto.ProductDTO;
 import com.nmb.sportwear_store.dto.UserDTO;
 import com.nmb.sportwear_store.dto.requests.*;
 import com.nmb.sportwear_store.entity.User;
@@ -13,6 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -103,6 +106,7 @@ public class UserManipulationService {
         }
     }
 
+    @Transactional(readOnly = true)
     public UserDTO findById(Long id) throws UserNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with id %d".formatted(id)));
@@ -110,5 +114,13 @@ public class UserManipulationService {
         return UserMapper.INSTANCE.userToUserDTO(user);
     }
 
+    @Transactional(readOnly = true)
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
 
+    @Transactional(readOnly = true)
+    public List<UserDTO> findAll() {
+        return UserMapper.INSTANCE.usersToUsersDTO(userRepository.findAll());
+    }
 }
