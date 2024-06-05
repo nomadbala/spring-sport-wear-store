@@ -3,8 +3,8 @@ package com.nmb.sportwear_store.dto;
 import java.io.Serializable;
 
 public record CartItemDTO(
-        ProductDTORequest product,
-        CartDTO cart,
+        Long id,
+        ProductDTO product,
         int quantity
 ) implements Serializable {
 }

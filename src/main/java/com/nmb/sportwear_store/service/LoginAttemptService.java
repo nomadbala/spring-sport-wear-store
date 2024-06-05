@@ -31,11 +31,6 @@ public class LoginAttemptService {
     }
 
     public void loginFailed(String username) {
-//        LoginAttempt attempt = LoginAttempt.builder()
-//                .username(username)
-//                .attemptTime(LocalDateTime.now())
-//                .successful(false)
-//                .build();
         LoginAttempt loginAttempt = new LoginAttempt();
         loginAttempt.setUsername(username);
         loginAttempt.setAttemptTime(LocalDateTime.now().minusMinutes(blockTimeMinutes));

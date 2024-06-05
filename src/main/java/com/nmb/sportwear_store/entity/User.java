@@ -1,8 +1,10 @@
 package com.nmb.sportwear_store.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,6 +52,11 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Cart cart;
+
+    public User() {
+        this.cart = new Cart(this, new ArrayList<>());
+    }
 }

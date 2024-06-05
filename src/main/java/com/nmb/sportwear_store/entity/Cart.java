@@ -1,5 +1,6 @@
 package com.nmb.sportwear_store.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,7 +14,8 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -26,6 +28,11 @@ public class Cart {
     }
 
     public Cart() {
+        this.items = new ArrayList<>();
+    }
+
+    public Cart(User user) {
+        this.user = user;
         this.items = new ArrayList<>();
     }
 }

@@ -1,5 +1,6 @@
 package com.nmb.sportwear_store.dto;
 
+import com.nmb.sportwear_store.entity.Cart;
 import com.nmb.sportwear_store.entity.Order;
 import com.nmb.sportwear_store.entity.Role;
 import lombok.Data;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public record UserDTO(
+        Long id,
         String username,
         String email,
         String password,
@@ -17,8 +19,7 @@ public record UserDTO(
         String city,
         String firstName,
         String lastName,
-        List<Order> orders,
         Set<Role> roles,
-        CartDTO cart
+        Cart cart
 ) implements Serializable {
 }

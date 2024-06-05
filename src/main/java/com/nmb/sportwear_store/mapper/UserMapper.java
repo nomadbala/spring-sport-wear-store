@@ -21,7 +21,6 @@ public interface UserMapper {
     @Mapping(target = "roles", expression = "java(java.util.Collections.singleton(role))")
     User registerRequestToUser(RegistrationRequest request, PasswordEncoder passwordEncoder, Role role);
 
-    @Mapping(target = "cart", ignore = true)
     UserDTO userToUserDTO(User user);
 
     List<UserDTO> usersToUsersDTO(List<User> users);

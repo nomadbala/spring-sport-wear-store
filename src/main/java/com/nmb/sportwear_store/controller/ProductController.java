@@ -1,6 +1,5 @@
 package com.nmb.sportwear_store.controller;
 
-import com.nmb.sportwear_store.dto.ProductDTORequest;
 import com.nmb.sportwear_store.dto.ProductDTOResponse;
 import com.nmb.sportwear_store.dto.ProductRequestCriterion;
 import com.nmb.sportwear_store.exception.ProductNotFoundException;

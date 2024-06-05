@@ -27,7 +27,6 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<CategoryDTOResponse> getAllCategories() {
         return CategoryMapper.INSTANCE.categoryListToCategoryDTOList(repository.findAll());
-//        return repository.findAll();
     }
 
     @Transactional

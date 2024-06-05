@@ -1,5 +1,6 @@
 package com.nmb.sportwear_store.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 public record ProductDTOResponse(
@@ -9,5 +10,5 @@ public record ProductDTOResponse(
         BigDecimal price,
         String size,
         String color
-) {
+) implements Serializable {
 }

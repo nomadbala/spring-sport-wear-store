@@ -65,14 +65,6 @@ public class ProductService {
         Product existingProduct = repository.findById(productDTORequest.id())
                 .orElseThrow(() -> new ProductNotFoundException("Product with id %d not found".formatted(productDTORequest.id())));
 
-//        existingProduct.builder()
-//                .title(productDTORequest.title())
-//                .brand(productDTORequest.brand())
-//                .price(productDTORequest.price())
-//                .category(CategoryMapper.INSTANCE.categoryDTOToCategory(productDTORequest.category()))
-//                .size(productDTORequest.size())
-//                .color(productDTORequest.color())
-//                .build();
         existingProduct.setTitle(productDTORequest.title());
         existingProduct.setBrand(productDTORequest.brand());
         existingProduct.setPrice(productDTORequest.price());
@@ -82,7 +74,7 @@ public class ProductService {
 
         repository.save(existingProduct);
 
-        return ProductMapper.INSTANCE.productToProductDTO(  existingProduct);
+        return ProductMapper.INSTANCE.productToProductDTO(existingProduct);
     }
 
     ///
