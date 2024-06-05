@@ -1,6 +1,7 @@
 package com.nmb.sportwear_store.mapper;
 
-import com.nmb.sportwear_store.dto.ProductDTO;
+import com.nmb.sportwear_store.dto.ProductDTORequest;
+import com.nmb.sportwear_store.dto.ProductDTOResponse;
 import com.nmb.sportwear_store.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,11 +13,12 @@ import java.util.List;
 public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
-    ProductDTO productToProductDTO(Product product);
+    ProductDTOResponse productToProductDTO(Product product);
 
-    List<ProductDTO> productListToProductDTOList(List<Product> products);
+    List<ProductDTOResponse> productListToProductDTOList(List<Product> products);
 
-    Product productDTOToProduct(ProductDTO productDTO);
+    @Mapping(target = "category", ignore = true)
+    Product productDTORequestToProduct(ProductDTORequest productDTORequest);
 
-    List<Product> productDTOListToProductList(List<ProductDTO> productDTOs);
+    List<Product> productDTOListToProductList(List<ProductDTORequest> productDTORequests);
 }

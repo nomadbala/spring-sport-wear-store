@@ -3,6 +3,7 @@ package com.nmb.sportwear_store.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,4 +19,13 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartItem> items;
+
+    public Cart(User user, List<CartItem> items) {
+        this.user = user;
+        this.items = items;
+    }
+
+    public Cart() {
+        this.items = new ArrayList<>();
+    }
 }

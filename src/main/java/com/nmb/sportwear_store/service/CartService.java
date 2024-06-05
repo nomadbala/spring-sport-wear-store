@@ -18,19 +18,17 @@ import com.nmb.sportwear_store.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class CartService {
-    private CartRepository cartRepository;
-
-    private CartItemRepository cartItemRepository;
-
-    private ProductRepository productRepository;
-
-    private UserRepository userRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     public List<CartDTO> getAllCarts() {
         return CartMapper.INSTANCE.cartListToCartDTOList(cartRepository.findAll());
@@ -43,18 +41,16 @@ public class CartService {
         return CartMapper.INSTANCE.cartToCartDTO(cart);
     }
 
-    public CartDTO addToCart(Long userId, AddProductToCartRequest request) throws CartNotFoundException, UserNotFoundException, ProductNotFoundException {
-        Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new CartNotFoundException("Cart with user id %d not found".formatted(userId)));
+    public CartDTO addToCart(Long userId, AddProductToCartRequest request) throws UserNotFoundException, ProductNotFoundException, CartNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id %d not found".formatted(userId)));
 
-        if (cart == null) {
-            User user = userRepository.findById(userId)
-                     .orElseThrow(() -> new UserNotFoundException("User with id %d not found".formatted(userId)));
+        Optional<Cart> cartOptional = cartRepository.findByUserId(userId);
 
-            cart = new Cart();
-            cart.setUser(user);
-            cart = cartRepository.save(cart);
-        }
+        Cart cart = cartOptional.orElseGet(() -> createNewCart(userId));
+
+        Product product = productRepository.findById(request.productId())
+                .orElseThrow(() -> new ProductNotFoundException("Product with id %d not found".formatted(request.productId())));
 
         Optional<CartItem> existingItemOpt = cart.getItems().stream()
                 .filter(item -> item.getProduct().getId().equals(request.productId()))
@@ -65,9 +61,6 @@ public class CartService {
             cartItem = existingItemOpt.get();
             cartItem.setQuantity(cartItem.getQuantity() + request.quantity());
         } else {
-            Product product = productRepository.findById(request.productId())
-                    .orElseThrow(() -> new ProductNotFoundException("Product with id %d not found".formatted(request.productId())));
-
             cartItem = new CartItem();
             cartItem.setCart(cart);
             cartItem.setProduct(product);
@@ -75,8 +68,15 @@ public class CartService {
         }
 
         cartItemRepository.save(cartItem);
-        return CartMapper.INSTANCE.cartToCartDTO(cartRepository.findById(cart.getId())
-                .orElseThrow(() -> new CartNotFoundException("Cart not found")));
+
+        return CartMapper.INSTANCE.cartToCartDTO(cart);
+    }
+
+    private Cart createNewCart(Long userId) {
+        Cart cart = new Cart();
+        cart.setUser(userRepository.findById(userId).orElseThrow());
+        cart.setItems(new ArrayList<>());
+        return cart;
     }
 
     public CartDTO updateCartItem(Long cartItemId, int quantity) throws CartItemNotFoundException {
@@ -98,11 +98,10 @@ public class CartService {
     }
 
     public CartDTO clearCart(Long userId) throws CartNotFoundException {
-        Cart cart = cartRepository.findById(userId)
+        Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new CartNotFoundException("Cart with user id %d not found".formatted(userId)));
 
         cartItemRepository.deleteAll(cart.getItems());
         return CartMapper.INSTANCE.cartToCartDTO(cart);
-
     }
 }

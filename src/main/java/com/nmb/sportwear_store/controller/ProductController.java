@@ -1,6 +1,7 @@
 package com.nmb.sportwear_store.controller;
 
-import com.nmb.sportwear_store.dto.ProductDTO;
+import com.nmb.sportwear_store.dto.ProductDTORequest;
+import com.nmb.sportwear_store.dto.ProductDTOResponse;
 import com.nmb.sportwear_store.dto.ProductRequestCriterion;
 import com.nmb.sportwear_store.exception.ProductNotFoundException;
 import com.nmb.sportwear_store.service.ProductService;
@@ -18,19 +19,19 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductDTOResponse> getAllProducts() {
         return service.getAllProducts();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductDTO getProductById(@PathVariable Long id) throws ProductNotFoundException {
+    public ProductDTOResponse getProductById(@PathVariable Long id) throws ProductNotFoundException {
         return service.getProductById(id);
     }
 
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductDTO> filterProducts(@RequestBody ProductRequestCriterion criterion) {
+    public List<ProductDTOResponse> filterProducts(@RequestBody ProductRequestCriterion criterion) {
         return service.getWithFilters(criterion);
     }
 }

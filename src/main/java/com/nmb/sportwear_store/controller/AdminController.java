@@ -1,9 +1,6 @@
 package com.nmb.sportwear_store.controller;
 
-import com.nmb.sportwear_store.dto.CartDTO;
-import com.nmb.sportwear_store.dto.CategoryDTO;
-import com.nmb.sportwear_store.dto.ProductDTO;
-import com.nmb.sportwear_store.dto.UserDTO;
+import com.nmb.sportwear_store.dto.*;
 import com.nmb.sportwear_store.exception.CategoryNotFoundException;
 import com.nmb.sportwear_store.exception.ProductNotFoundException;
 import com.nmb.sportwear_store.exception.UserNotFoundException;
@@ -48,7 +45,7 @@ public class AdminController {
 
     @PostMapping("/product")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDTO createProduct(@RequestBody ProductDTO dto) throws CategoryNotFoundException {
+    public ProductDTOResponse createProduct(@RequestBody ProductDTORequest dto) throws CategoryNotFoundException {
         return productService.createProduct(dto);
     }
 
@@ -60,7 +57,7 @@ public class AdminController {
 
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
-    public void updateProduct(@RequestBody ProductDTO dto) throws ProductNotFoundException, CategoryNotFoundException {
+    public void updateProduct(@RequestBody ProductDTORequest dto) throws ProductNotFoundException, CategoryNotFoundException {
         productService.updateProduct(dto);
     }
 
@@ -72,7 +69,7 @@ public class AdminController {
 
     @GetMapping("/category")
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryDTO> getAllCategories() {
+    public List<CategoryDTOResponse> getAllCategories() {
         return categoryService.getAllCategories();
     }
 
@@ -84,13 +81,13 @@ public class AdminController {
 
     @PostMapping("/category")
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDTO createCategory(@RequestBody CategoryDTO dto) {
+    public CategoryDTOResponse createCategory(@RequestBody CategoryDTORequest dto) {
         return categoryService.createCategory(dto);
     }
 
     @PutMapping("/category/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateCategory(@PathVariable Long id, @RequestBody CategoryDTO dto) throws CategoryNotFoundException {
+    public void updateCategory(@PathVariable Long id, @RequestBody CategoryDTORequest dto) throws CategoryNotFoundException {
         categoryService.updateCategory(id, dto);
     }
 }

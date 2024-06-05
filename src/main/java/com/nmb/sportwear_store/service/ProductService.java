@@ -1,11 +1,12 @@
 package com.nmb.sportwear_store.service;
 
-import com.nmb.sportwear_store.dto.ProductDTO;
+import com.nmb.sportwear_store.dto.ProductDTORequest;
+import com.nmb.sportwear_store.dto.ProductDTOResponse;
 import com.nmb.sportwear_store.dto.ProductRequestCriterion;
 import com.nmb.sportwear_store.entity.Product;
 import com.nmb.sportwear_store.exception.ProductNotFoundException;
-import com.nmb.sportwear_store.mapper.CategoryMapper;
 import com.nmb.sportwear_store.mapper.ProductMapper;
+import com.nmb.sportwear_store.repository.CategoryRepository;
 import com.nmb.sportwear_store.repository.ProductRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -25,16 +26,18 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository repository;
 
+    private final CategoryRepository categoryRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductDTOResponse> getAllProducts() {
         return ProductMapper.INSTANCE.productListToProductDTOList(repository.findAll());
     }
 
     @Transactional(readOnly = true)
-    public ProductDTO getProductById(Long id) throws ProductNotFoundException {
+    public ProductDTOResponse getProductById(Long id) throws ProductNotFoundException {
         Product product = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product with id %d not found".formatted(id)));
 
@@ -42,8 +45,10 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDTO createProduct(ProductDTO productDTO) {
-        Product product = ProductMapper.INSTANCE.productDTOToProduct(productDTO);
+    public ProductDTOResponse createProduct(ProductDTORequest productDTORequest) {
+        Product product = ProductMapper.INSTANCE.productDTORequestToProduct(productDTORequest);
+
+        product.setCategory(categoryRepository.findById(productDTORequest.categoryId()).orElseThrow());
 
         repository.save(product);
 
@@ -56,28 +61,28 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDTO updateProduct(ProductDTO productDTO) throws ProductNotFoundException {
-        Product existingProduct = repository.findById(productDTO.id())
-                .orElseThrow(() -> new ProductNotFoundException("Product with id %d not found".formatted(productDTO.id())));
+    public ProductDTOResponse updateProduct(ProductDTORequest productDTORequest) throws ProductNotFoundException {
+        Product existingProduct = repository.findById(productDTORequest.id())
+                .orElseThrow(() -> new ProductNotFoundException("Product with id %d not found".formatted(productDTORequest.id())));
 
 //        existingProduct.builder()
-//                .title(productDTO.title())
-//                .brand(productDTO.brand())
-//                .price(productDTO.price())
-//                .category(CategoryMapper.INSTANCE.categoryDTOToCategory(productDTO.category()))
-//                .size(productDTO.size())
-//                .color(productDTO.color())
+//                .title(productDTORequest.title())
+//                .brand(productDTORequest.brand())
+//                .price(productDTORequest.price())
+//                .category(CategoryMapper.INSTANCE.categoryDTOToCategory(productDTORequest.category()))
+//                .size(productDTORequest.size())
+//                .color(productDTORequest.color())
 //                .build();
-        existingProduct.setTitle(productDTO.title());
-        existingProduct.setBrand(productDTO.brand());
-        existingProduct.setPrice(productDTO.price());
-        existingProduct.setCategory(CategoryMapper.INSTANCE.categoryDTOToCategory(productDTO.category()));
-        existingProduct.setSize(productDTO.size());
-        existingProduct.setColor(productDTO.color());
+        existingProduct.setTitle(productDTORequest.title());
+        existingProduct.setBrand(productDTORequest.brand());
+        existingProduct.setPrice(productDTORequest.price());
+        existingProduct.setCategory(categoryRepository.findById(productDTORequest.categoryId()).orElseThrow());
+        existingProduct.setSize(productDTORequest.size());
+        existingProduct.setColor(productDTORequest.color());
 
         repository.save(existingProduct);
 
-        return ProductMapper.INSTANCE.productToProductDTO(existingProduct);
+        return ProductMapper.INSTANCE.productToProductDTO(  existingProduct);
     }
 
     ///
@@ -85,7 +90,7 @@ public class ProductService {
     ///
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> getWithFilters(ProductRequestCriterion criterion) {
+    public List<ProductDTOResponse> getWithFilters(ProductRequestCriterion criterion) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
         Root<Product> product = criteriaQuery.from(Product.class);

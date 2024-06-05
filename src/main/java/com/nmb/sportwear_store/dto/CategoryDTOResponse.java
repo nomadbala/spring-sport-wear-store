@@ -3,9 +3,9 @@ package com.nmb.sportwear_store.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public record CategoryDTO(
+public record CategoryDTOResponse(
         Long id,
         String name,
-        List<ProductDTO> products
+        List<ProductDTOResponse> products
 ) implements Serializable {
 }

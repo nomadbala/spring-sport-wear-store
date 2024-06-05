@@ -17,7 +17,7 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/{userId}")
-    public CartDTO getCart(@PathVariable Long userId) throws CartNotFoundException {
+    public CartDTO getCart(@PathVariable Long userId) throws CartNotFoundException, UserNotFoundException {
         return cartService.getCartByUserId(userId);
     }
 

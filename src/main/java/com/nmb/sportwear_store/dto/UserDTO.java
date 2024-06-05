@@ -18,6 +18,7 @@ public record UserDTO(
         String firstName,
         String lastName,
         List<Order> orders,
-        Set<Role> roles
+        Set<Role> roles,
+        CartDTO cart
 ) implements Serializable {
 }

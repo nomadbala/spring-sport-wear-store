@@ -1,6 +1,5 @@
 package com.nmb.sportwear_store.service;
 
-import com.nmb.sportwear_store.dto.ProductDTO;
 import com.nmb.sportwear_store.dto.UserDTO;
 import com.nmb.sportwear_store.dto.requests.*;
 import com.nmb.sportwear_store.entity.User;
@@ -10,7 +9,6 @@ import com.nmb.sportwear_store.mapper.UserMapper;
 import com.nmb.sportwear_store.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
