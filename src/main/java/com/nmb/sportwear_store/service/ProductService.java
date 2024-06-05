@@ -30,7 +30,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductDTO> getAllProducts() {
-        return ProductMapper.INSTANCE.productDTOListToProductDTOList(repository.findAll());
+        return ProductMapper.INSTANCE.productListToProductDTOList(repository.findAll());
     }
 
     @Transactional(readOnly = true)
@@ -60,20 +60,24 @@ public class ProductService {
         Product existingProduct = repository.findById(productDTO.id())
                 .orElseThrow(() -> new ProductNotFoundException("Product with id %d not found".formatted(productDTO.id())));
 
-        existingProduct.builder()
-                .title(productDTO.title())
-                .brand(productDTO.brand())
-                .price(productDTO.price())
-                .category(CategoryMapper.INSTANCE.categoryDTOToCategory(productDTO.category()))
-                .size(productDTO.size())
-                .color(productDTO.color())
-                .build();
+//        existingProduct.builder()
+//                .title(productDTO.title())
+//                .brand(productDTO.brand())
+//                .price(productDTO.price())
+//                .category(CategoryMapper.INSTANCE.categoryDTOToCategory(productDTO.category()))
+//                .size(productDTO.size())
+//                .color(productDTO.color())
+//                .build();
+        existingProduct.setTitle(productDTO.title());
+        existingProduct.setBrand(productDTO.brand());
+        existingProduct.setPrice(productDTO.price());
+        existingProduct.setCategory(CategoryMapper.INSTANCE.categoryDTOToCategory(productDTO.category()));
+        existingProduct.setSize(productDTO.size());
+        existingProduct.setColor(productDTO.color());
 
         repository.save(existingProduct);
 
         return ProductMapper.INSTANCE.productToProductDTO(existingProduct);
-
-
     }
 
     ///
@@ -116,6 +120,6 @@ public class ProductService {
 
         List<Product> predicatedProducts = entityManager.createQuery(criteriaQuery).getResultList(); // Выполнение запроса
 
-        return ProductMapper.INSTANCE.productDTOListToProductDTOList(predicatedProducts);
+        return ProductMapper.INSTANCE.productListToProductDTOList(predicatedProducts);
     }
 }

@@ -1,16 +1,14 @@
 package com.nmb.sportwear_store.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
 @Entity
 @Table(name = "products")
-@Builder
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +23,9 @@ public class Product {
     @Column(name = "price")
     private BigDecimal price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
+    @JsonBackReference
     private Category category;
 
     @Column(name = "size")
@@ -34,8 +33,4 @@ public class Product {
 
     @Column(name = "color")
     private String color;
-
-    public Product() {
-
-    }
 }

@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "login_attempts")
-@Builder
 public class LoginAttempt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +22,4 @@ public class LoginAttempt {
 
     @Column(nullable = false)
     private boolean successful;
-
-    public LoginAttempt() {
-
-    }
 }

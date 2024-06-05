@@ -31,13 +31,17 @@ public class LoginAttemptService {
     }
 
     public void loginFailed(String username) {
-        LoginAttempt attempt = LoginAttempt.builder()
-                .username(username)
-                .attemptTime(LocalDateTime.now())
-                .successful(false)
-                .build();
+//        LoginAttempt attempt = LoginAttempt.builder()
+//                .username(username)
+//                .attemptTime(LocalDateTime.now())
+//                .successful(false)
+//                .build();
+        LoginAttempt loginAttempt = new LoginAttempt();
+        loginAttempt.setUsername(username);
+        loginAttempt.setAttemptTime(LocalDateTime.now().minusMinutes(blockTimeMinutes));
+        loginAttempt.setSuccessful(false);
 
-        repository.save(attempt);
+        repository.save(loginAttempt);
     }
 
     public boolean isBlocked(String username) {

@@ -5,6 +5,6 @@ import java.io.Serializable;
 public record CartItemDTO(
         ProductDTO product,
         CartDTO cart,
-        int quantrity
+        int quantity
 ) implements Serializable {
 }

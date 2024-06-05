@@ -1,13 +1,10 @@
 package com.nmb.sportwear_store.controller;
 
-import com.nmb.sportwear_store.dto.UserDTO;
 import com.nmb.sportwear_store.dto.requests.*;
 import com.nmb.sportwear_store.exception.FailedUserUpdateException;
-import com.nmb.sportwear_store.exception.UserNotFoundException;
 import com.nmb.sportwear_store.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor

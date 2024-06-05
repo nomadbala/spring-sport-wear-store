@@ -1,14 +1,13 @@
 package com.nmb.sportwear_store.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import java.util.List;
 
-@Entity
 @Data
-@Builder
+@Entity
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,10 +15,7 @@ public class Category {
 
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Product> products;
-
-    public Category() {
-
-    }
 }

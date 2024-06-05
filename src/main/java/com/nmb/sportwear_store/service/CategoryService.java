@@ -21,6 +21,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<CategoryDTO> getAllCategories() {
         return CategoryMapper.INSTANCE.categoryListToCategoryDTOList(repository.findAll());
+//        return repository.findAll();
     }
 
     @Transactional
@@ -32,7 +33,7 @@ public class CategoryService {
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
         Category category = CategoryMapper.INSTANCE.categoryDTOToCategory(categoryDTO);
         category = repository.save(category);
-        return categoryDTO;
+        return CategoryMapper.INSTANCE.categoryToCategoryDTO(category);
     }
 
     @Transactional
@@ -41,14 +42,10 @@ public class CategoryService {
         Category category = repository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category with id %d not found".formatted(id)));
 
-        category.builder()
-                .name(categoryDTO.name())
-                .products(ProductMapper.INSTANCE.productDTOListToProductList(categoryDTO.products()))
-                .build();
+        category.setName(categoryDTO.name());
+        category.setProducts(ProductMapper.INSTANCE.productDTOListToProductList(categoryDTO.products()));
 
-        repository.save(category);
-
-        return categoryDTO;
-
+        category = repository.save(category);
+        return CategoryMapper.INSTANCE.categoryToCategoryDTO(category);
     }
 }

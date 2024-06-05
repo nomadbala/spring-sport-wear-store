@@ -23,12 +23,16 @@ public class RegistrationService {
 
     @Transactional
     public UserDTO register(RegistrationRequest request) {
-        Role role = roleRepository.findByName("ROLE_USER")
-                .orElseGet(() -> roleRepository.save(new Role("ROLE_USER")));
+        Role role = roleRepository.findByName("ROLE_ADMIN").orElseGet(
+                () -> {
+                    Role newRole = new Role("ROLE_ADMIN");
+                    return roleRepository.save(newRole);
+                }
+        );
 
-        User requestUser = UserMapper.INSTANCE.registerRequestToUser(request, passwordEncoder, role);
+        User user = UserMapper.INSTANCE.registerRequestToUser(request, passwordEncoder, role);
 
-        User savedUser = userRepository.save(requestUser);
-        return UserMapper.INSTANCE.userToUserDTO(savedUser);
+        User user1 = userRepository.save(user);
+        return UserMapper.INSTANCE.userToUserDTO(user1);
     }
 }
